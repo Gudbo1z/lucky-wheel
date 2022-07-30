@@ -16,8 +16,8 @@
 
 .main-wheel {
   position: relative;
-  width: 500px;
-  height: 500px;
+  width: 30vw;
+  height: 30vw;
 }
 
 .spin-btn {
@@ -35,8 +35,8 @@
 }
 
 .wheel {
-  width: 500px;
-  height: 500px;
+  width: 30vw;
+  height: 30vw;
   position: relative;
   border-radius: 50%;
   overflow: hidden;
@@ -47,11 +47,11 @@
 }
 
 .check-point-overlay {
-  z-index: -1;
   position: absolute;
+  z-index: -1;
   top: 0;
-  width: 500px;
-  height: 500px;
+  width: 30vw;
+  height: 30vw;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -63,9 +63,25 @@
   height: 1px;
 }
 
+.check-point-rule-overlay {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.check-point-rule {
+  background-color: red;
+  width: 1px;
+  height: 1px;
+}
+
 .wheel .rotate-thing {
   height: 50%;
-  width: 500px;
   position: absolute;
   top: 0;
   transform-origin: bottom;
@@ -75,11 +91,12 @@
 }
 
 .rotate-thing-default {
-  width: 500px;
-  height: 500px;
+  width: 30vw;
+  height: 30vw;
   border-radius: 50%;
   background-color: orangered;
-  animation: spin 5s linear 1ms infinite forwards;
+  -webkit-animation: spin 5s linear 1ms infinite forwards;
+          animation: spin 5s linear 1ms infinite forwards;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,8 +122,8 @@
 
 .pup-up-winner {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
@@ -122,7 +139,45 @@
   border-radius: 10px;
 }
 
-@keyframes spin {
+.wheel-rule-cover {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.wheel-rule {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.rotate-thing-rule {
+  height: 50%;
+  width: 30vw;
+  position: absolute;
+  top: 0;
+  transform-origin: bottom;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.rotate-thing-rule p {
+  text-align: center;
+  transform: rotate(-90deg);
+}
+
+@-webkit-keyframes spin {
   from {
     transform: rotate(0deg);
   }
@@ -131,4 +186,11 @@
   }
 }
 
-/*# sourceMappingURL=App.css.map */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}/*# sourceMappingURL=App.css.map */
