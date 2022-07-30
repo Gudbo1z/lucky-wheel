@@ -1,34 +1,128 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#root {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 100%;
+  height: 100vh;
+  background-color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.main {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
+.main-wheel {
+  position: relative;
+  width: 500px;
+  height: 500px;
+}
+
+.spin-btn {
+  z-index: 1;
+  cursor: pointer;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.wheel {
+  width: 500px;
+  height: 500px;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: orangered;
+}
+
+.check-point-overlay {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.check-point {
+  background-color: red;
+  width: 1px;
+  height: 1px;
+}
+
+.wheel .rotate-thing {
+  height: 50%;
+  width: 500px;
+  position: absolute;
+  top: 0;
+  transform-origin: bottom;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.rotate-thing-default {
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background-color: orangered;
+  animation: spin 5s linear 1ms infinite forwards;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rotate-thing p {
+  text-align: center;
+  transform: rotate(-90deg);
+}
+
+.input-field {
+  width: 200px;
+  height: 400px;
+}
+
+.win-point {
+  width: 1px;
+  height: 1px;
+  background-color: black;
+  display: inline;
+  margin: 0;
+}
+
+.pup-up-winner {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.winner-is {
+  background-color: white;
+  z-index: 1;
+  width: 30%;
+  height: 10%;
+  color: black;
+  border-radius: 10px;
+}
+
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }
@@ -36,3 +130,5 @@
     transform: rotate(360deg);
   }
 }
+
+/*# sourceMappingURL=App.css.map */
