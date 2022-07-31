@@ -182,10 +182,9 @@ function App() {
     setResultIsChoose(false)
   }
 
-  
-
   useEffect(()=>{
     const list = document.querySelectorAll('.language > ul >li')
+    console.log(document.querySelector('.language'))
     for(let i = 0; i< list.length; i++){
       list[i].addEventListener('click', ()=>{
         if(list[i].innerHTML == 'English' || list[i].innerHTML == 'Tiếng Việt'){
@@ -197,6 +196,9 @@ function App() {
         else alert(list[i].innerHTML+' is not available')
       })
     }
+  }, [popUpContent])
+
+  useEffect(()=>{
     const listNavbar = document.querySelectorAll('.navbar >ul >li')
     for(let i = 0; i<listNavbar.length; i++){
       listNavbar[i].addEventListener('click', ()=>{
