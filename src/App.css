@@ -1,26 +1,40 @@
+i {
+  font-size: 40px;
+}
+
 #root {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100vh;
-  background-color: white;
+  background-color: #f092ad;
 }
 
 .main {
+  position: relative;
+  max-width: 812px;
   width: 100%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  overflow: hidden;
+  background-color: #f092ad;
 }
 
 .main-wheel {
   position: relative;
-  width: 30vw;
-  height: 30vw;
+  width: 30rem;
+  height: 30rem;
+  border: solid 10px #23c4e7;
+  border-radius: 50%;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
 }
 
 .spin-btn {
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
   z-index: 1;
   cursor: pointer;
   left: 0;
@@ -29,29 +43,31 @@
   bottom: 0;
   margin: auto;
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
+  background-color: #fd9ab6;
+  border: none;
 }
 
 .wheel {
-  width: 30vw;
-  height: 30vw;
+  width: 100%;
+  height: 100%;
   position: relative;
   border-radius: 50%;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: orangered;
+  background-color: #02f2f2;
 }
 
 .check-point-overlay {
   position: absolute;
   z-index: -1;
   top: 0;
-  width: 30vw;
-  height: 30vw;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -91,25 +107,123 @@
 }
 
 .rotate-thing-default {
-  width: 30vw;
-  height: 30vw;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  background-color: orangered;
+  background-color: #02f2f2;
   -webkit-animation: spin 5s linear 1ms infinite forwards;
           animation: spin 5s linear 1ms infinite forwards;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .rotate-thing p {
+  position: relative;
+  bottom: 80px;
+  margin: 0;
   text-align: center;
   transform: rotate(-90deg);
 }
 
+li {
+  cursor: pointer;
+}
+
 .input-field {
-  width: 200px;
-  height: 400px;
+  transition: display 10s ease 0s;
+  z-index: 2;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+}
+.input-field .input-field-main {
+  background-color: #72e6e2;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+}
+.input-field .input-field-main .options {
+  border-bottom: solid 2px black;
+}
+.input-field .input-field-main .options ul {
+  padding: 0;
+}
+.input-field .input-field-main .options ul li {
+  list-style: none;
+  background-color: #f52794;
+  margin-bottom: 8px;
+  width: 100px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+}
+.input-field .input-field-main .options ul li p {
+  margin: 0;
+  color: #07f1e6;
+}
+
+.language {
+  padding: 20px;
+  width: 50%;
+  height: 100%;
+  background-color: #72e6e2;
+}
+.language ul {
+  height: 80%;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0;
+}
+.language ul li {
+  list-style: none;
+}
+.language ul .active {
+  color: white;
+}
+
+.result {
+  padding: 20px;
+  width: 50%;
+  height: 100%;
+  background-color: #72e6e2;
+}
+
+.chart {
+  padding: 20px;
+  width: 50%;
+  height: 100%;
+  background-color: #72e6e2;
+}
+
+.input p {
+  font-weight: bolder;
+}
+.input .input-main {
+  width: 812px;
+  display: flex;
+  justify-content: space-between;
+}
+.input .input-main .input-main-child {
+  width: 45%;
+  height: 100%;
+}
+.input .input-main .input-main-child p {
+  font-weight: bold;
+}
+.input .input-main .input-main-child textarea {
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  outline: none;
+  box-sizing: border-box;
 }
 
 .win-point {
@@ -121,6 +235,7 @@
 }
 
 .pup-up-winner {
+  z-index: 2;
   position: fixed;
   width: 100vw;
   height: 100vh;
@@ -133,13 +248,14 @@
 .winner-is {
   background-color: white;
   z-index: 1;
-  width: 30%;
+  width: 812px;
   height: 10%;
   color: black;
   border-radius: 10px;
 }
 
 .wheel-rule-cover {
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
   width: 50%;
   height: 50%;
   position: absolute;
@@ -148,6 +264,8 @@
   right: 0;
   bottom: 0;
   margin: auto;
+  border-radius: 50%;
+  border: solid 10px #11d7d8;
 }
 
 .wheel-rule {
@@ -163,7 +281,7 @@
 
 .rotate-thing-rule {
   height: 50%;
-  width: 30vw;
+  width: 100%;
   position: absolute;
   top: 0;
   transform-origin: bottom;
@@ -175,6 +293,34 @@
 .rotate-thing-rule p {
   text-align: center;
   transform: rotate(-90deg);
+}
+
+.navbar {
+  z-index: 1;
+  width: 812px;
+  background-color: #cb38f1;
+  border-bottom: solid 2px #cb38f1;
+  border-radius: 10px;
+}
+.navbar ul {
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navbar ul li {
+  list-style: none;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  border-radius: 10px;
+  display: inline-block;
+  width: 100px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #afc8f1;
+}
+.navbar ul li p {
+  margin: 14.5px 0;
 }
 
 @-webkit-keyframes spin {
