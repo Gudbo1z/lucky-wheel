@@ -19,12 +19,14 @@ function App() {
   const wheel = useRef()
   const wheelRule = useRef()
   const angle = useRef(0)
+  const dataRef = useRef([])
   const color = ['#fff161', '#f6be64', '#ed8b67', '#e25069', '#df486a', '#a52868', '#732766', '#fde961', '#f4b464', '#eb8167', '#e1486a', '#d02a6b', '#9d2868', '#6b2665', '#fce162', '#f3ad65', '#e97967', '#e0426b', '#c92a6a', '#972868', '#5d2665', '#fad962', '#f1a565', '#e97268', '#df3b6b', '#c22a6a', '#8e2767', '#5d2665', '#f9d162', '#f09e66', '#e76968', '#de356b', '#bb2a6a', '#872766', '#542563', '#f7c962', '#ef9666', '#e56168', '#dd2d6c', '#b32969', '#802767', '#4e2563', '#f6bf64', '#ed8c66', '#e45669', '#db216d', '#ac2869', '#772665', '#462462']
   const dataLanguage = {
     'English': ['option', 'language', 'result', 'chart'],
     'Tiếng Việt': ['chế độ chơi', 'ngôn ngữ', 'kết quả', 'thống kê']
   }
   const [languages, setLanguage] = useState(dataLanguage['English'])
+  const [data, setData] = useState([])
   const inputFieldContent = (
     <div className='input-field-main' onClick={(e)=>{
       e.stopPropagation()
@@ -62,38 +64,104 @@ function App() {
   const result =(
     <div className='result'>
       <p>RESULT</p>
-      <ul>{input.map((input, index)=>{
-          return (
-              <li key={index}>{input}</li>
-          )
-        })}
-      </ul>
+      <div className='result-content'>
+        <div className='players'>
+          <p>player's names</p>
+          <ul>{input.map((input, index)=>{
+              return (
+                  <li key={index}>{input}</li>
+              )
+            })}
+          </ul>
+        </div>
+        <div className='shots'>
+          <p>total shots</p>
+          <ul>
+            {
+              data.map((data, index)=>{
+                return <li key={index}>{data.data}</li>
+              })
+            }
+          </ul>
+        </div>
+      </div>
     </div>
   )
   const options = {
-    xAxis: {
-      categories: [...input]
+    accessibility:{
+      enabled: false
     },
-    yAxis: {
-        title: {
-          text: 'total shot'
-        },
-        plotLines: [{
-          value: 0,
-          width: 1,
-          color: '#808080'
-        }]
-    },
+
     title: {
-      text: 'Result'
-    },
-    series: [{
-      data: [1, 2, 3]
-    }]
+      text: 'result'
+  },
+
+  subtitle: {
+      text: Date()
+  },
+
+  yAxis: {
+      title: {
+          text: 'total shots'
+      }
+  },
+
+  xAxis: {
+      accessibility: {
+          rangeDescription: 'Range: 2010 to 2017'
+      }
+  },
+
+  legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle'
+  },
+
+  plotOptions: {
+      series: {
+          label: {
+              connectorAllowed: false
+          },
+          pointStart: 2010
+      }
+  },
+
+  series: [{
+      name: 'Installation',
+      data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+  }, {
+      name: 'Manufacturing',
+      data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+  }, {
+      name: 'Sales & Distribution',
+      data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+  }, {
+      name: 'Project Development',
+      data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+  }, {
+      name: 'Other',
+      data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+  }],
+
+  responsive: {
+      rules: [{
+          condition: {
+              maxWidth: 500
+          },
+          chartOptions: {
+              legend: {
+                  layout: 'horizontal',
+                  align: 'center',
+                  verticalAlign: 'bottom'
+              }
+          }
+      }]
+  }
   }
   const chart =(
-    <div className='chart'>
-      <p>RESULT</p>
+    <div className='chart' id='chart'>
+      <p>RESULT CHART</p>
       <HighchartsReact
         highcharts={Highcharts}
         options={options}
@@ -142,20 +210,28 @@ function App() {
         winners.push(el1[i])
       }
     }
+    const newWinner = winners.sort((a, b)=>{
+      return b.getBoundingClientRect().right - a.getBoundingClientRect().right
+    })[0]
     if(el1[0].className == 'rotate-thing'){
-      setWinner(winners.sort((a, b)=>{
-        return b.getBoundingClientRect().right - a.getBoundingClientRect().right
-      })[0])
+      setWinner(newWinner)
     }
     if(el1[0].className == 'rotate-thing-rule'){
-      setRule(winners.sort((a, b)=>{
-        return b.getBoundingClientRect().right - a.getBoundingClientRect().right
-      })[0])
+      setRule(newWinner)
     }
+    setData(prev => prev.map((e, index)=>{
+      console.log(e.name, 'vs', newWinner.querySelector('p').innerHTML)
+      if(e.name == newWinner.querySelector('p').innerHTML) return ({
+        ...e, data: e.data+1
+      })
+      else return e
+    }))
     setPopUpResult(true)
-  } 
+  }
+  console.log(data)
 
-  function handleSpin(){
+  function handleSpin(e){
+    e.preventDefault()
     setSpin(true)
     wheelRule.current.addEventListener('transitionend', ()=>{
       checkWinner(document.querySelectorAll('.rotate-thing-rule'), document.querySelector('.check-point-rule'))
@@ -181,10 +257,27 @@ function App() {
     setInputField(false)
     setResultIsChoose(false)
   }
-
+  useEffect(()=>{setData(input.map((input, index)=>{
+      return ({
+        name: input,
+        data: 0
+      })
+    }))
+    dataRef.current = input
+  }, [input])
+  // console.log(data)
+  // useEffect(()=>{
+  //   if(winner != '') {
+  //     setData(prev => prev.map((e, index)=>{
+  //     if(e.name == winner.querySelector('p').innerHTML) return {
+  //       ...e, data: e.data+1
+  //     }
+  //     else return e
+  //   }))
+  // }
+  // }, [winner])
   useEffect(()=>{
     const list = document.querySelectorAll('.language > ul >li')
-    console.log(document.querySelector('.language'))
     for(let i = 0; i< list.length; i++){
       list[i].addEventListener('click', ()=>{
         if(list[i].innerHTML == 'English' || list[i].innerHTML == 'Tiếng Việt'){
@@ -216,7 +309,6 @@ function App() {
     setRadius(wheel1.clientWidth/2)
     setRadiusRule(wheelRule1.clientWidth/2)
   }, [])
-  // console.log(input)
 
   return (
     <div className='main'>
@@ -233,10 +325,10 @@ function App() {
         </ul>
       </div>
 
-      <div className='main-wheel'>
+      <div className='main-wheel' ref={wheel} >
         {
           input[1]? 
-            <div className='wheel' ref={wheel} style={spin?{transition:`transform 8s ease 0s`, transform:`rotate(${randomSpin}deg)`}:{transform:`rotate(${angle.current}deg)`}}>
+            <div className='wheel' style={spin?{transition:`transform 8s ease 0s`, transform:`rotate(${randomSpin}deg)`}:{transform:`rotate(${angle.current}deg)`}}>
               {
                 input.map((rotate, index)=>{
                 let randomColor = color[index]
@@ -258,7 +350,7 @@ function App() {
 
 {/* let randomColor = Math.floor(Math.random()*16777215).toString(16); */}
 
-        <div className='wheel-rule-cover' style={inputRule[1]?{}:{boxShadow:'none', border:'none'}}>
+        <div className='wheel-rule-cover' style={inputRule[1]?{}:{boxShadow:'none', border:'none'}} ref={wheelRule}>
           { inputRule[1] &&
               <div className='wheel-rule' style={spin?{transition:`transform 9s ease 0s`, transform:`rotate(-${randomSpin+100}deg)`}:{transform:`rotate(-${angle.current+100}deg)`}}>
                 {
@@ -306,13 +398,14 @@ function App() {
 
       <div className='input-field' onClick={handleInputField} style={inputField? {display:'block'}:{display:'none'}}>
             {resultIsChoose? result:popUpContent}
+            {/* {chart} */}
       </div>
 
 
       {popUpResult && 
       <div className='pup-up-winner' onClick={handlePopUpWindow}> 
         <div className='winner-is' onClick={(e)=>{e.stopPropagation()}}>
-          <p>{winner.querySelector('p').innerHTML} sẽ uống {rule?rule.querySelector('p').innerHTML: ''}</p>
+          <p> {winner.querySelector('p').innerHTML} sẽ uống {rule?rule.querySelector('p').innerHTML: ''}</p>
         </div>
       </div>}
     </div>

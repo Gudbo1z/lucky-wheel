@@ -195,12 +195,27 @@ li {
   height: 100%;
   background-color: #72e6e2;
 }
+.result .result-content {
+  display: flex;
+  justify-content: space-between;
+}
+.result ul {
+  padding: 0;
+}
+.result ul li {
+  list-style: none;
+  margin-bottom: 10px;
+}
 
 .chart {
   padding: 20px;
-  width: 50%;
-  height: 100%;
+  width: 100%;
+  height: 60%;
   background-color: #72e6e2;
+  box-sizing: border-box;
+}
+.chart .data-highcharts-chart .highchart-container {
+  width: 100%;
 }
 
 .input p {

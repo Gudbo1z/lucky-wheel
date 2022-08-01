@@ -23,7 +23,7 @@ i{
     overflow: hidden;
     background-color: #f092ad;
 }
- 
+
 .main-wheel{
     position: relative;
     width: 30rem;
@@ -191,12 +191,29 @@ li{
         width: 50%;
         height: 100%;
         background-color: #72e6e2;
+        .result-content{
+            display: flex;
+            justify-content: space-between;
+        }
+        ul{
+            padding: 0;
+            li{
+                list-style: none;
+                margin-bottom: 10px;
+            }
+        }
     }
     .chart{
         padding: 20px;
-        width: 50%;
-        height: 100%;
+        width: 100%;
+        height: 60%;
         background-color: #72e6e2;
+        box-sizing: border-box;
+        .data-highcharts-chart{
+            .highchart-container{
+                width: 100%;
+            }
+        }
     }
 
 .input{
