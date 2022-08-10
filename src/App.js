@@ -26,20 +26,23 @@ function App() {
     'Tiếng Việt': ['chế độ chơi', 'ngôn ngữ', 'kết quả', 'thống kê']
   }
   const [languages, setLanguage] = useState(dataLanguage['English'])
+  const [challenges, setChallenges] = useState(false)
   const [data, setData] = useState([])
-  const inputFieldContent = (
-    <div className='input-field-main' onClick={(e)=>{
-      e.stopPropagation()
-    }}>
-      <div className='options'>
-        <p>OPTION</p>
-        <ul>
-          <li><p>single</p></li>
-          <li><p>dual</p></li>
-          <li><p>challenges</p></li>
-        </ul>
-      </div>
-  </div>)
+  const d = new Date();
+  const option = (
+    <div className='options' onClick={(e)=>{e.stopPropagation()}}>
+      <p>OPTION</p>
+      <ul>
+        <div><p>single</p></div>
+        <div><p>dual</p></div>
+        <div className='option-challenges' onClick={handleChallenges}>
+          <p>challenges</p>
+        </div>
+      </ul>
+    </div>
+  )
+  // console.log(input)
+  // console.log(data)
   const language = (
       <div className='language' onClick={(e)=>{
         e.stopPropagation()
@@ -60,7 +63,7 @@ function App() {
           <li>ໄທ</li>
         </ul>
       </div>
-    )
+  )
   const result =(
     <div className='result'>
       <p>RESULT</p>
@@ -69,7 +72,7 @@ function App() {
           <p>player's names</p>
           <ul>{input.map((input, index)=>{
               return (
-                  <li key={index}>{input}</li>
+                <li key={index}>{input}</li>
               )
             })}
           </ul>
@@ -87,80 +90,63 @@ function App() {
       </div>
     </div>
   )
+
   const options = {
+    chart:{
+      type: 'column'
+    },
+
     accessibility:{
       enabled: false
     },
 
     title: {
       text: 'result'
-  },
+    },
 
-  subtitle: {
-      text: Date()
-  },
+    subtitle: {
+        text: d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
+    },
 
-  yAxis: {
-      title: {
-          text: 'total shots'
-      }
-  },
+    yAxis: {
+        title: {
+            text: 'total shots'
+        }
+    },
 
-  xAxis: {
-      accessibility: {
-          rangeDescription: 'Range: 2010 to 2017'
-      }
-  },
+    xAxis: {
+      categories: ['day 1', 'day 2', 'day 3']
+    },
 
-  legend: {
-      layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'middle'
-  },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
 
-  plotOptions: {
-      series: {
-          label: {
-              connectorAllowed: false
-          },
-          pointStart: 2010
-      }
-  },
+    tooltip: {
+      valueSuffix: ' shot'
+    },
 
-  series: [{
-      name: 'Installation',
-      data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-  }, {
-      name: 'Manufacturing',
-      data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-  }, {
-      name: 'Sales & Distribution',
-      data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-  }, {
-      name: 'Project Development',
-      data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-  }, {
-      name: 'Other',
-      data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-  }],
+    series: [...data], 
 
-  responsive: {
-      rules: [{
-          condition: {
-              maxWidth: 500
-          },
-          chartOptions: {
-              legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom'
-              }
-          }
-      }]
-  }
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
   }
   const chart =(
-    <div className='chart' id='chart'>
+    <div className='chart' id='chart' onClick={(e)=>{e.stopPropagation()}}>
       <p>RESULT CHART</p>
       <HighchartsReact
         highcharts={Highcharts}
@@ -168,9 +154,17 @@ function App() {
       />
     </div>
   )
-  
-  const [popUpContent, setPopUpConTent] = useState(inputFieldContent)
+  console.log(options.series)
 
+  function handleOptions(){
+    const option = document.querySelectorAll('.options > ul > div')
+  }
+
+  function handleChallenges(){
+    setChallenges(prev => !prev)
+    setInputRule([])
+    setRule('')
+  }
     
     function cal(radius, input){
       const sin = Math.sin((Math.PI*(90-(360/input)/2))/180)
@@ -201,7 +195,7 @@ function App() {
 
   function checkWinner(el1, el2){
     const {top, bottom, left, right} = el2.getBoundingClientRect()
-    const winners= []
+    const winners = []
     for(let i = 0; i < el1.length; i++){
       if(el1[i].getBoundingClientRect().top < top 
       && el1[i].getBoundingClientRect().bottom > bottom
@@ -215,30 +209,23 @@ function App() {
     })[0]
     if(el1[0].className == 'rotate-thing'){
       setWinner(newWinner)
+      setData(prev => {console.log(prev, 'gia tri cu')
+        return (prev.map((e, index)=>{
+        if(e.name == newWinner.querySelector('p').innerHTML) return ({
+          ...e, data: [e.data[0] + 1]
+        })
+        else return e
+      }))})
     }
     if(el1[0].className == 'rotate-thing-rule'){
       setRule(newWinner)
     }
-    setData(prev => prev.map((e, index)=>{
-      console.log(e.name, 'vs', newWinner.querySelector('p').innerHTML)
-      if(e.name == newWinner.querySelector('p').innerHTML) return ({
-        ...e, data: e.data+1
-      })
-      else return e
-    }))
     setPopUpResult(true)
   }
-  console.log(data)
+  // console.log(data)
 
   function handleSpin(e){
-    e.preventDefault()
     setSpin(true)
-    wheelRule.current.addEventListener('transitionend', ()=>{
-      checkWinner(document.querySelectorAll('.rotate-thing-rule'), document.querySelector('.check-point-rule'))
-    })
-    wheel.current.addEventListener('transitionend', ()=>{
-      checkWinner(document.querySelectorAll('.rotate-thing'), document.querySelector('.check-point'))
-    })
   }
 
   function handlePopUpWindow( ){
@@ -252,30 +239,24 @@ function App() {
       if(input[1])setRadius(wheel.current.clientWidth/2)
       setRadiusRule(wheelRule.current.clientWidth/2)
   }
-
+  // setOptionIsChoose(false)
+  // setResultIsChoose(false)
+  // setLanguageIsChoose(false)
+  // setChartIsChoose(false)
   function handleInputField(){
     setInputField(false)
+    setOptionIsChoose(false)
     setResultIsChoose(false)
+    setLanguageIsChoose(false)
+    setChartIsChoose(false)
   }
   useEffect(()=>{setData(input.map((input, index)=>{
       return ({
         name: input,
-        data: 0
+        data: [0]
       })
     }))
-    dataRef.current = input
   }, [input])
-  // console.log(data)
-  // useEffect(()=>{
-  //   if(winner != '') {
-  //     setData(prev => prev.map((e, index)=>{
-  //     if(e.name == winner.querySelector('p').innerHTML) return {
-  //       ...e, data: e.data+1
-  //     }
-  //     else return e
-  //   }))
-  // }
-  // }, [winner])
   useEffect(()=>{
     const list = document.querySelectorAll('.language > ul >li')
     for(let i = 0; i< list.length; i++){
@@ -289,25 +270,36 @@ function App() {
         else alert(list[i].innerHTML+' is not available')
       })
     }
-  }, [popUpContent])
+
+  }, [])
+  const [optionIsChoose, setOptionIsChoose] = useState(false)
+  const [languageIsChoose, setLanguageIsChoose] = useState(false)
+  const [chartIsChoose, setChartIsChoose] = useState(false)
 
   useEffect(()=>{
     const listNavbar = document.querySelectorAll('.navbar >ul >li')
     for(let i = 0; i<listNavbar.length; i++){
       listNavbar[i].addEventListener('click', ()=>{
         setInputField(true)
-        if(listNavbar[0]==listNavbar[i]) setPopUpConTent(inputFieldContent)
-        if(listNavbar[1]==listNavbar[i]) setPopUpConTent(language)
+        if(listNavbar[0]==listNavbar[i]) setOptionIsChoose(true)
+        if(listNavbar[1]==listNavbar[i]) setLanguageIsChoose(true)
         if(listNavbar[2]==listNavbar[i]) setResultIsChoose(true)
-        if(listNavbar[3]==listNavbar[i]) setPopUpConTent(chart)
+        if(listNavbar[3]==listNavbar[i]) setChartIsChoose(true)
       })
     }
-    const wheel1 = document.querySelector('.main-wheel')
-    const wheelRule1 = document.querySelector('.wheel-rule-cover')
     window.addEventListener('resize', windowResize)
     setRandomSpin(Math.floor(Math.random() * (6000 - 5000))+5000)
-    setRadius(wheel1.clientWidth/2)
-    setRadiusRule(wheelRule1.clientWidth/2)
+    setRadius(wheel.current.clientWidth/2)
+    setRadiusRule(wheelRule.current.clientWidth/2)
+    wheel.current.addEventListener('transitionend', (e)=>{
+      e.stopPropagation()
+      checkWinner(document.querySelectorAll('.rotate-thing'), document.querySelector('.check-point'))
+    })
+    wheelRule.current.addEventListener('transitionend', (e)=>{
+      e.stopPropagation()
+      checkWinner(document.querySelectorAll('.rotate-thing-rule'), document.querySelector('.check-point-rule'))
+    })
+
   }, [])
 
   return (
@@ -383,13 +375,12 @@ function App() {
         </div>
       </div>
       <div className='input'>
-        <p>INPUT</p>
         <div className='input-main'>
           <div className='input-main-child'>
             <p>players's names</p>
             <textarea onChange={handleChange} className='input-field-wheel'></textarea>
           </div>
-          <div className='input-main-child'>
+          <div className='input-main-child rule' style={challenges?{display:'block'}:{display:'none'}}>
             <p>challenges</p>
             <textarea onChange={handleChangeRule} className='input-field-rule'></textarea>
           </div>
@@ -397,15 +388,17 @@ function App() {
       </div>
 
       <div className='input-field' onClick={handleInputField} style={inputField? {display:'block'}:{display:'none'}}>
-            {resultIsChoose? result:popUpContent}
-            {/* {chart} */}
+            {resultIsChoose && result}
+            {optionIsChoose&& option}
+            {languageIsChoose && language}
+            {chartIsChoose && chart}
       </div>
 
 
       {popUpResult && 
       <div className='pup-up-winner' onClick={handlePopUpWindow}> 
         <div className='winner-is' onClick={(e)=>{e.stopPropagation()}}>
-          <p> {winner.querySelector('p').innerHTML} sẽ uống {rule?rule.querySelector('p').innerHTML: ''}</p>
+          <p> {winner.querySelector('p').innerHTML} sẽ uống {rule && inputRule.length>1?rule.querySelector('p').innerHTML: ''}</p>
         </div>
       </div>}
     </div>

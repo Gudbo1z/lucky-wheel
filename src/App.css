@@ -139,21 +139,20 @@ li {
   width: 100%;
   height: 100%;
 }
-.input-field .input-field-main {
+.input-field .options {
   background-color: #72e6e2;
   width: 50%;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 0 20px;
-}
-.input-field .input-field-main .options {
   border-bottom: solid 2px black;
 }
-.input-field .input-field-main .options ul {
+.input-field .options ul {
   padding: 0;
 }
-.input-field .input-field-main .options ul li {
+.input-field .options ul div {
+  cursor: pointer;
   list-style: none;
   background-color: #f52794;
   margin-bottom: 8px;
@@ -163,9 +162,13 @@ li {
   justify-content: center;
   border-radius: 10px;
 }
-.input-field .input-field-main .options ul li p {
+.input-field .options ul div p {
   margin: 0;
   color: #07f1e6;
+}
+.input-field .options .options-active {
+  background-color: black;
+  color: white;
 }
 
 .language {
@@ -224,10 +227,13 @@ li {
 .input .input-main {
   width: 812px;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
 }
 .input .input-main .input-main-child {
-  width: 45%;
+  max-width: 100%;
+  width: 48%;
   height: 100%;
 }
 .input .input-main .input-main-child p {
