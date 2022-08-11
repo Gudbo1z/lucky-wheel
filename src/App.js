@@ -16,6 +16,9 @@ function App() {
   const [radiusRule, setRadiusRule] = useState('')
   const [inputField, setInputField]= useState(false)
   const [resultIsChoose, setResultIsChoose] = useState(false)
+  const [optionIsChoose, setOptionIsChoose] = useState(false)
+  const [languageIsChoose, setLanguageIsChoose] = useState(false)
+  const [chartIsChoose, setChartIsChoose] = useState(false)
   const wheel = useRef()
   const wheelRule = useRef()
   const angle = useRef(0)
@@ -35,14 +38,12 @@ function App() {
       <ul>
         <div><p>single</p></div>
         <div><p>dual</p></div>
-        <div className='option-challenges' onClick={handleChallenges}>
+        <div className='option-challenges' onClick={handleChallenges} style={challenges?{backgroundColor:'black'}:{}}>
           <p>challenges</p>
         </div>
       </ul>
     </div>
   )
-  // console.log(input)
-  // console.log(data)
   const language = (
       <div className='language' onClick={(e)=>{
         e.stopPropagation()
@@ -65,7 +66,7 @@ function App() {
       </div>
   )
   const result =(
-    <div className='result'>
+    <div className='result' onClick={(e)=>{e.stopPropagation()}}>
       <p>RESULT</p>
       <div className='result-content'>
         <div className='players'>
@@ -76,6 +77,7 @@ function App() {
               )
             })}
           </ul>
+        <button onClick={handleSave}>save result!</button>
         </div>
         <div className='shots'>
           <p>total shots</p>
@@ -86,11 +88,20 @@ function App() {
               })
             }
           </ul>
+        <button onClick={handleDelete}>delete result!</button>
         </div>
       </div>
     </div>
   )
-
+  function handleSave(){
+    // if(JSON.parse(localStorage.getItem('data'))){
+    //   localStorage.setItem('data', JSON.stringify(options.series))
+    // }
+    localStorage.setItem('data', JSON.stringify(options.series))
+  }
+  function handleDelete(){
+    localStorage.removeItem('data')
+  }
   const options = {
     chart:{
       type: 'column'
@@ -115,7 +126,7 @@ function App() {
     },
 
     xAxis: {
-      categories: ['day 1', 'day 2', 'day 3']
+      categories: ['day 1', 'day 2', 'day 3', 'day 4', 'day 5', 'day 6', 'day 7']
     },
 
     legend: {
@@ -128,7 +139,7 @@ function App() {
       valueSuffix: ' shot'
     },
 
-    series: [...data], 
+    series:JSON.parse(localStorage.getItem('data'))?[...mergerData(data, JSON.parse(localStorage.getItem('data')))]:[...data],
 
     responsive: {
         rules: [{
@@ -154,19 +165,44 @@ function App() {
       />
     </div>
   )
-  console.log(options.series)
-
-  function handleOptions(){
-    const option = document.querySelectorAll('.options > ul > div')
-  }
-
+  function mergerData(data, oldData){
+    if(oldData){
+    let mergerData = [...data, ...oldData]
+    let newData = []
+    for(let i = 0; i< mergerData.length; i++){
+        for(let j = 0; j < mergerData.length; j++){
+            if(mergerData[i].name == mergerData[j].name && i !=j && !newData.some(e =>e.name == mergerData[i].name)){
+                newData.push({
+                    name: mergerData[i].name,
+                    data: [ ...mergerData[j].data, ...mergerData[i].data]
+                })
+            }
+        }
+        if(!newData.some(e=>e.name == mergerData[i].name)){
+            newData.push(mergerData[i])
+        }
+    }
+    let dataLength = newData.sort((a, b)=>{
+        return b.data.length - a.data.length
+    })[0].data.length
+    console.log(newData, dataLength)
+    return newData.map((dt, index)=>{
+        if(dt.data.length < dataLength && data.some(e => e.name == dt.name)){
+            return {
+                ...dt,
+                data: [...Array(dataLength-dt.data.length).fill(0), ...dt.data]
+            }
+        }
+        else return dt
+    })}
+}
   function handleChallenges(){
     setChallenges(prev => !prev)
     setInputRule([])
     setRule('')
   }
     
-    function cal(radius, input){
+  function cal(radius, input){
       const sin = Math.sin((Math.PI*(90-(360/input)/2))/180)
     const b = radius*sin
     const bPercent = b*100/radius
@@ -209,7 +245,7 @@ function App() {
     })[0]
     if(el1[0].className == 'rotate-thing'){
       setWinner(newWinner)
-      setData(prev => {console.log(prev, 'gia tri cu')
+      setData(prev => {
         return (prev.map((e, index)=>{
         if(e.name == newWinner.querySelector('p').innerHTML) return ({
           ...e, data: [e.data[0] + 1]
@@ -222,8 +258,6 @@ function App() {
     }
     setPopUpResult(true)
   }
-  // console.log(data)
-
   function handleSpin(e){
     setSpin(true)
   }
@@ -232,17 +266,13 @@ function App() {
     setPopUpResult(false)
     setSpin(false)
     angle.current = randomSpin
-    setRandomSpin((Math.floor(Math.random() * (6000 - 5000))) + 5000 + angle.current)
+    setRandomSpin((Math.floor(Math.random() * (6000 - 5000))) + 8000 + angle.current)
   }
 
   function windowResize(){
       if(input[1])setRadius(wheel.current.clientWidth/2)
       setRadiusRule(wheelRule.current.clientWidth/2)
   }
-  // setOptionIsChoose(false)
-  // setResultIsChoose(false)
-  // setLanguageIsChoose(false)
-  // setChartIsChoose(false)
   function handleInputField(){
     setInputField(false)
     setOptionIsChoose(false)
@@ -271,10 +301,7 @@ function App() {
       })
     }
 
-  }, [])
-  const [optionIsChoose, setOptionIsChoose] = useState(false)
-  const [languageIsChoose, setLanguageIsChoose] = useState(false)
-  const [chartIsChoose, setChartIsChoose] = useState(false)
+  }, [languageIsChoose])
 
   useEffect(()=>{
     const listNavbar = document.querySelectorAll('.navbar >ul >li')
@@ -288,7 +315,7 @@ function App() {
       })
     }
     window.addEventListener('resize', windowResize)
-    setRandomSpin(Math.floor(Math.random() * (6000 - 5000))+5000)
+    setRandomSpin(Math.floor(Math.random() * (6000 - 5000))+8000)
     setRadius(wheel.current.clientWidth/2)
     setRadiusRule(wheelRule.current.clientWidth/2)
     wheel.current.addEventListener('transitionend', (e)=>{

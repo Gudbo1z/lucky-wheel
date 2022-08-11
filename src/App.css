@@ -13,7 +13,6 @@ i {
 
 .main {
   position: relative;
-  max-width: 812px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -136,7 +135,7 @@ li {
   z-index: 2;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.8);
-  width: 100%;
+  width: 812px;
   height: 100%;
 }
 .input-field .options {
@@ -208,6 +207,20 @@ li {
 .result ul li {
   list-style: none;
   margin-bottom: 10px;
+}
+.result button {
+  cursor: pointer;
+  border-radius: 10px;
+  width: 90px;
+  height: 25px;
+  background-color: black;
+  color: white;
+  outline: none;
+  border: none;
+}
+.result button:active {
+  color: black;
+  background-color: white;
 }
 
 .chart {
@@ -359,5 +372,31 @@ li {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+@media only screen and (max-width: 812px) {
+  .main {
+    box-sizing: border-box;
+    padding: 3px;
+  }
+  .navbar {
+    width: inherit;
+  }
+  .navbar ul li {
+    width: 70px;
+  }
+  .main-wheel {
+    width: 21rem;
+    height: 21rem;
+  }
+  .input {
+    width: 100%;
+  }
+  .input .input-main {
+    flex-direction: column;
+    width: 100%;
+  }
+  .input .input-main .input-main-child {
+    width: 100%;
   }
 }/*# sourceMappingURL=App.css.map */
