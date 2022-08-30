@@ -8,4 +8,4 @@ không còn điều gì để chém gió
 
 hay những người mới gặp lần đầu
 
-tăng cảm giác khăng khí thân mật
+tăng cảm giác khăng khít thân mật
